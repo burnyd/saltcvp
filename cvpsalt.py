@@ -102,10 +102,6 @@ Examples:
 
   salt 'minion' cvpsalt.load_config mode='delte' configlet_name='vlans'
 
-  Show the contents of a configlet
-
-  salt 'minion' cvpsalt.load_config mode='getconfig' configlet_name='leaf-vlans'
-
 '''
 
 def load_config(mode=None, configlet_name=None, configlet=None, **kwargs):
@@ -122,12 +118,9 @@ def load_config(mode=None, configlet_name=None, configlet=None, **kwargs):
         return getconfig
     else:
         return "Please specify add, delete or show + configlet name"
-
+   
 #work in progress
-def load_template(config_name, configlet):
+def load_template(location):
     client = connect_cvp()
-    files = __salt__['cp.get_file_str'](configlet)
-    add = client.api.add_configlet(config_name, files)
-
-#Work in progress
-def add_config_to(mode=None, configlet_name=None, configlet=None, **kwargs):
+    render_files =  __salt__.slsutil.renderer(path=location, default_renderer='jinja')
+    return render_files
